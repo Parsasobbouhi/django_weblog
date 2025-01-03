@@ -1,0 +1,19 @@
+{% load static %}
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="social-icons">
+                    <li><a href="{{ admin.linkedin }}" target="_blank">Linkedin</a></li>
+                    <li><a href="{{ admin.github }}" target="_blank">Github</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-12">
+                <div class="copyright-text">
+                    <p>This site is owned by<a href="{% url 'account:about_developer' %}"> Parsa Sobbouhi</a>.</p>
+                    <p>This site is developed by Parsa Sobbouhi using Django framework.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

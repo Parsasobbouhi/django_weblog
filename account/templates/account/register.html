@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <title>Register</title>
+</head>
+<body>
+<div class="login">
+    <form action="#" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <h1>Register</h1>
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+            {{ form.first_name.label_tag }}
+            {{ form.first_name }}
+            {{ form.last_name.label_tag }}
+            {{ form.last_name }}
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            {{ form.email.label_tag }}
+            {% if form.email.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ form.email.errors }}
+                </div>
+            {% endif %}
+            {{ form.email }}
+            <div class="password-container">
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
+                <span class="glyphicon glyphicon-eye-open password-toggle" id="toggle-password"></span>
+            </div>
+            <span class="help-block">Your password is very important for you.</span>
+            <div class="password-container">
+                {{ form.password2.label_tag }}
+                {{ form.password2 }}
+                <span class="glyphicon glyphicon-eye-open password-toggle" id="toggle-password2"></span>
+            </div>
+            <span class="help-block">Enter the same password as before, for verification.</span>
+            <button type="submit">Register</button>
+            <div class="account-info">
+                <span>You have already an Account?</span>
+                <a href="/login">Sign in</a>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="{% static 'js/register.js' %}"></script>
+</body>
+</html>

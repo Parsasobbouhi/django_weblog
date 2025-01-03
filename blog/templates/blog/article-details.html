@@ -1,0 +1,251 @@
+{% extends 'base/base.html' %}
+{% load social_share %}
+{% load simple_tags %}
+{% load static %}
+
+
+{% block title %}{{ article.title }}{% endblock %}
+{% block content %}
+    <!-- Page Content -->
+    <!-- Banner Starts Here -->
+    <div class="heading-page header-text">
+        <section class="page-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-content">
+                            <h4>{{ article.title }} Post Details</h4>
+                            <h2>by {{ article.author.get_full_name }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Banner Ends Here -->
+
+    {% include 'includes/user_card_bar.html' %}
+
+
+    <section class="blog-posts grid-system">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="all-blog-posts">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="blog-post">
+                                    <div class="blog-thumb">
+                                        <img src="{{ article.image.url }}" alt="">
+                                    </div>
+                                    <div class="down-content">
+                                        <span id="likes-section">{{ article.category.first.title }}</span>
+                                        <h4>{{ article.title }}</h4>
+                                        <ul class="post-info">
+                                            <li>
+                                                <a href="{% url 'blog:author_detail' article.author.id %}">{{ article.author }}</a>
+                                            </li>
+                                            <li><a href="">{{ article.pub_date }}</a></li>
+                                            <li>
+                                                <a href="{{ article.get_absolute_url }}#comments-section">
+                                                {% if article.comments.count == 1 %}{{ article.comments.count }} Comment
+                                                    {% else %}{{ article.comments.count }} Comments{% endif %}
+                                                </a>
+                                            </li>
+                                            <li><a href="{{ article.get_absolute_url }}">
+                                                {% if article.views  == 1 %}
+                                                    {{ article.views }} view
+                                                {% else %}
+                                                    {{ article.views }} views
+                                                {% endif %}
+                                            </a></li>
+                                        </ul>
+                                        <p>{{ article.body }}</p>
+                                        <div class="post-options">
+                                            <div class="row">
+                                                <div class="col-6" >
+                                                    {% if request.user.is_authenticated %}
+                                                        <ul class="post-tags" >
+                                                            {% if is_like %}
+                                                                <li>
+                                                                    <a onclick="like('{{ article.slug }}', '{{ article.id }}')">
+                                                                        <i class="fa fa-heart" data-article-id="{{ article.id }}"></i>
+                                                                    </a><span class="like-count" data-article-id="{{ article.id }}">{{ article.likes.all.count }}</span>
+                                                                </li>
+                                                            {% else %}
+                                                                <li>
+                                                                    <a onclick="like('{{ article.slug }}', '{{ article.id }}')">
+                                                                        <i class="fa fa-heart-o" data-article-id="{{ article.id }}"></i>
+                                                                    </a><span class="like-count" data-article-id="{{ article.id }}">{{ article.likes.all.count }}</span>
+                                                                </li>
+                                                            {% endif %}
+                                                        </ul>
+                                                    {% else %}
+                                                        <ul class="post-tags">
+                                                            <li>
+                                                                <a href="{% url 'account:login' %}">
+                                                                    <i class="fa fa-heart-o"></i>
+                                                                </a><span id="like-count">{{ article.likes.all.count }}</span>
+                                                            </li>
+                                                        </ul>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-6">
+                                                    <ul class="post-share">
+                                                        <li><i class="fa fa-share-alt"></i></li>
+                                                        <li>{% post_to_whatsapp article.get_absolute_url "whatsApp" %}</li>
+                                                        ,
+                                                        <li id="comments-section">{% post_to_telegram 'The blog: {{ article.title }}. Click it out!' article.get_absolute_url "telegram" %}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="sidebar-item comments">
+                                    <div class="sidebar-heading">
+                                        <h2>{% if article.comments.count == 1 %}{{ article.comments.count }} Comment
+                                            {% else %}{{ article.comments.count }} Comments{% endif %} </h2>
+                                    </div>
+                                    <div class="content">
+                                        <ul>
+                                            {% for comment in article.comments.all %}
+                                                {% if comment.parent == None %}
+                                                    <li>
+                                                        <div class="author-thumb">
+                                                            {% if comment.user.profile.image %}
+                                                                <img src="{{ comment.user.profile.image.url }}"
+                                                                     alt="{{ comment.user.get_full_name }}" width="100px" height="100px" style="border-radius: 100%">
+                                                            {% else %}
+                                                                <img src="{% static 'images/user.png' %}"
+                                                                     alt="{{ comment.user.get_full_name }}" width="100px" height="100px" style="border-radius: 100%">
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="right-content">
+                                                            <h4>{{ comment.user.get_full_name }}<span>{{ comment.created }}</span>
+                                                            </h4>
+                                                            <p>{{ comment.body }}</p>
+                                                            <button onclick="reply({{ comment.id }})"
+                                                                    class="btn btn-primary">Reply
+                                                            </button>
+                                                        </div>
+                                                    </li>
+                                                    {% for reply in comment.replies.all %}
+                                                        <li class="replied">
+                                                            <div class="author-thumb">
+                                                                {% if reply.user.profile.image %}
+                                                                    <img src="{{ reply.user.profile.image.url }}"
+                                                                         alt="{{ reply.user.get_full_name }}" width="100px" height="100px" style="border-radius: 100%">
+                                                                {% else %}
+                                                                    <img src="{% static 'images/user.png' %}"
+                                                                         alt="{{ reply.user.get_full_name }}" width="100px" height="100px" style="border-radius: 100%">
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="right-content">
+                                                                <h4>{{ reply.user.get_full_name }}<span>{{ reply.created }}</span>
+                                                                </h4>
+                                                                <p>{{ reply.body }}</p>
+                                                            </div>
+                                                        </li>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="sidebar-item submit-comment">
+                                    <div class="sidebar-heading">
+                                        <h2>Your comment</h2>
+                                    </div>
+                                    {% if not request.user.is_authenticated %}
+                                        <div class="content">
+                                            <p>You must be <a href="{% url 'account:login' %}">logged in</a> to write a
+                                                comment.</p>
+                                        </div>
+                                    {% endif %}
+                                    <div class="content">
+                                        <form id="comment" action="#" method="post">
+                                            <label for="parent_id"></label><input type="hidden" id="parent_id"
+                                                                                  name="parent_id" value="">
+                                            {% csrf_token %}
+                                            {% if request.user.is_authenticated %}
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <fieldset>
+                                                            <label for="message"></label><textarea name="body" rows="6" id="message"
+                                                                                                   placeholder="Type Your Comment Here"
+                                                                                                   required="" maxlength="100"></textarea>
+                                                        </fieldset>
+                                                    </div>
+                                                    <div class="col-lg-12">
+                                                        <fieldset>
+                                                            <button type="submit" id="form-submit" class="main-button">
+                                                                Submit
+                                                            </button>
+                                                        </fieldset>
+                                                    </div>
+                                                </div>
+                                                <div id="cancel-reply" style="display: none; margin-top: 10px;">
+                                                    <button type="button" id="cancel-reply-button" class="main-button">
+                                                        Cancel Reply
+                                                    </button>
+                                                </div>
+                                            {% endif %}
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% include 'includes/side_bar.html' %}
+            </div>
+        </div>
+    </section>
+    <script>
+        function reply(id) {
+            let parentInput = document.getElementById('parent_id');
+            let message = document.getElementById('message');
+            let cancelReplyButton = document.getElementById('cancel-reply');
+
+            if (parentInput && message && cancelReplyButton) {
+                parentInput.value = id;
+
+                cancelReplyButton.style.display = 'block';
+
+                if (parentInput.value.trim() !== "") {
+                    message.placeholder = 'Please type your reply here';
+                } else {
+                    message.placeholder = 'Please type your comment here';
+                }
+
+                message.scrollIntoView({behavior: 'smooth', block: 'center'});
+            }
+        }
+
+        document.getElementById('cancel-reply-button')?.addEventListener('click', function () {
+            let parentInput = document.getElementById('parent_id');
+            let message = document.getElementById('message');
+            let cancelReplyButton = document.getElementById('cancel-reply');
+
+            if (parentInput) {
+                parentInput.value = '';
+            }
+
+            if (cancelReplyButton) {
+                cancelReplyButton.style.display = 'none';
+            }
+
+            if (message) {
+                message.placeholder = 'Please type your comment here';
+            }
+        });
+
+
+    </script>
+{% endblock %}

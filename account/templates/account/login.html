@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <title>Login</title>
+</head>
+<body>
+<div class="login">
+    <form action="#" method="post">
+        {% csrf_token %}
+        {% if  form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+        <div class="form-group">
+            <h1>Login</h1>
+            <label for="username">Username</label>
+            {{ form.username }}
+            <label for="password">Password</label>
+            <div class="password-container">
+                {{ form.password }}
+                <span class="glyphicon glyphicon-eye-open password-toggle" id="toggle-password"></span>
+            </div>
+            <button type="submit">Login</button>
+            <div class="account-info">
+                <span>You don't have already an Account?</span>
+                <a href="{% url 'account:register' %}">Sign up</a>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="{% static 'js/login.js' %}"></script>
+</body>
+</html>

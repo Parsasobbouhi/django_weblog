@@ -1,0 +1,77 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Contact Us{% endblock %}
+{% block content %}
+    <!-- Page Content -->
+    <!-- Banner Starts Here -->
+    <div class="heading-page header-text">
+        <section class="page-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-content">
+                            <h4>contact us</h4>
+                            <h2>let’s stay in touch!</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Banner Ends Here -->
+
+
+    <section class="contact-us py-5 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body p-5">
+                            <div class="text-center mb-5">
+                                <h2 class="fw-bold text-primary">Send us a message</h2>
+                                <p class="text-muted">We'd love to hear from you. Please fill out the form below.</p>
+                            </div>
+                            <div class="content">
+                                {% if not request.user.is_authenticated %}
+                                    <div class="alert alert-warning text-center">
+                                        You must be <a href="{% url 'account:login' %}"
+                                                       class="text-decoration-underline">logged in</a> to send a
+                                        message.
+                                    </div>
+                                {% else %}
+                                    <form id="contact-form" action="#" method="post">
+                                        {% csrf_token %}
+                                        <div id="form-message" class="text-center mt-3"></div>
+                                        <div class="row g-4">
+                                            <div class="col-12">
+                                                <label for="{{ form.subject.id_for_label }}"
+                                                       class="form-label fw-semibold">Subject</label>
+                                                {{ form.subject }}
+                                            </div>
+                                            <div class="col-12">
+                                                <label for="{{ form.message.id_for_label }}"
+                                                       class="form-label fw-semibold">Your Message</label>
+                                                {{ form.message }}
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-12 text-center mt-5">
+                                            <button type="submit" class="btn btn-primary px-5 py-2 fw-semibold">Send
+                                                Message
+                                            </button>
+                                        </div>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}

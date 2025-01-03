@@ -1,0 +1,158 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #000000;
+  font-family: Arial, sans-serif;
+}
+
+.login {
+  position: relative;
+  border: 1px solid black;
+  width: 90%;
+  max-width: 500px;
+  min-height: 600px;
+  color: white;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.75);
+  background: url("../images/banner-item-05.jpg") center no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+
+.login::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 20px;
+  z-index: 0;
+}
+
+
+
+form {
+  box-sizing: border-box;
+  padding: 70px;
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  border-radius: 20px;
+  z-index: 1;
+}
+
+.password-container {
+  position: relative;
+  width: 100%;
+}
+
+input[type="password"]::-ms-reveal, input[type="password"]::-ms-clear {
+  display: none;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #333;
+}
+
+h1 {
+  font-weight: normal;
+  font-size: 24px;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
+}
+
+label {
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 2px;
+  padding-left: 10px;
+  width: 100%;
+}
+
+input {
+  background: rgba(255, 255, 255, 0.3);
+  height: 40px;
+  border-radius: 20px;
+  padding: 0 20px;
+  border: none;
+  margin-bottom: 10px;
+  color: white;
+  font-size: 14px;
+  display: block;
+  width: 100%;
+}
+
+.help-block {
+  font-size: 10px;
+  margin-top: -10px;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+button {
+  background: rgb(45, 126, 231);
+  height: 40px;
+  border-radius: 20px;
+  border: none;
+  margin-top: 20px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  background: rgb(35, 106, 201);
+}
+
+.account-info {
+  margin-top: 20px;
+  text-align: center;
+}
+
+
+@media screen and (max-width: 768px) {
+  .login {
+    min-height: 500px;
+  }
+
+  input {
+    height: 35px;
+    font-size: 12px;
+  }
+
+  button {
+    height: 35px;
+    font-size: 14px;
+  }
+
+  form {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+}

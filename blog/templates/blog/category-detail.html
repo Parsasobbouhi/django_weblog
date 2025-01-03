@@ -1,0 +1,129 @@
+{% extends 'base/base.html' %}
+{% load simple_tags %}
+{% load static %}
+
+
+{% block title %}Articles{% endblock %}
+{% block content %}
+    <!-- Page Content -->
+    <!-- Banner Starts Here -->
+    <div class="heading-page header-text">
+        <section class="page-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-content">
+                            <h4>All Blogs</h4>
+                            <h2>All Blog Entries in {{ category }} category</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Banner Ends Here -->
+
+    {% include 'includes/user_card_bar.html' %}
+
+
+    <section class="blog-posts grid-system">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="all-blog-posts">
+                        <div class="row">
+                            {% for article in articles %}
+                                <div class="col-lg-6">
+                                    <div class="blog-post">
+                                        <div class="blog-thumb">
+                                            <img src="{{ article.image.url }}" alt="{{ article.title }}">
+                                        </div>
+                                        <div class="down-content">
+                                            <span>{{ article.category.first.title }}</span>
+                                            <a href="{{ article.get_absolute_url }}"><h4>{{ article.title }}</h4></a>
+                                            <ul class="post-info">
+                                                <li>
+                                                    <a href="{% url 'blog:author_detail' article.author.id %}">{{ article.author }}</a>
+                                                </li>
+                                                <li><a href="{{ article.get_absolute_url }}">{{ article.pub_date }}</a></li>
+                                                <li><a href="{{ article.get_absolute_url }}#comments-section">
+                                                    {% if article.comments.count == 1 %}{{ article.comments.count }}
+                                                        Comment
+                                                        {% else %}{{ article.comments.count }} Comments{% endif %}</a>
+                                                </li>
+                                                <li><a href="{{ article.get_absolute_url }}">
+                                                    {% if article.views  == 1 %}
+                                                        {{ article.views }} view
+                                                    {% else %}
+                                                        {{ article.views }} views
+                                                    {% endif %}
+                                                </a></li>
+                                            </ul>
+                                            <p>{{ article.body|truncatewords:20 }}</p>
+                                            <div class="post-options">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        {% if request.user.is_authenticated %}
+                                                            <ul class="post-tags">
+                                                                {% if article.id in liked_article_ids %}
+                                                                    <li>
+                                                                        <a onclick="like('{{ article.slug }}', '{{ article.id }}')">
+                                                                            <i class="fa fa-heart" data-article-id="{{ article.id }}"></i>
+                                                                        </a><span class="like-count" data-article-id="{{ article.id }}">{{ article.likes.all.count }}</span>
+                                                                    </li>
+                                                                {% else %}
+                                                                    <li>
+                                                                        <a onclick="like('{{ article.slug }}', '{{ article.id }}')">
+                                                                            <i class="fa fa-heart-o" data-article-id="{{ article.id }}"></i>
+                                                                        </a><span class="like-count" data-article-id="{{ article.id }}">{{ article.likes.all.count }}</span>
+                                                                    </li>
+                                                                {% endif %}
+                                                            </ul>
+                                                        {% else %}
+                                                            <ul class="post-tags">
+                                                                <li>
+                                                                    <a href="{% url 'account:login' %}">
+                                                                        <i class="fa fa-heart-o"></i>
+                                                                    </a>{{ article.likes.count }}
+                                                                </li>
+                                                            </ul>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="col-lg-12">
+                                {% if articles.has_other_pages %}
+                                    <ul class="page-numbers">
+                                        {% if articles.has_previous %}
+                                            <li><a href="?page
+                                                    {{ articles.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"><i
+                                                    class="fa fa-angle-double-left"></i></a></li>
+                                        {% endif %}
+                                        {% for number in articles.paginator.page_range %}
+                                            {% if articles.number == number %}
+                                                <li class="active"><a href="?page={{ number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ number }}</a>
+                                                </li>
+                                            {% else %}
+                                                <li><a href="?page={{ number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ number }}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if articles.has_next %}
+                                            <li><a href="?page={{ articles.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"><i class="fa fa-angle-double-right"></i></a></li>
+                                        {% endif %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% include 'includes/side_bar.html' %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
