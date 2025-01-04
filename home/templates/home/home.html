@@ -47,6 +47,21 @@
 
     {% include 'includes/user_card_bar.html' %}
 
+    {% if not articles %}
+        <div class="container vh-100 d-flex justify-content-center align-items-center">
+            <div class="text-center p-5 shadow-lg rounded bg-light">
+                <i class="fa fa-folder-open text-primary mb-3" style="font-size: 4rem;"></i>
+                <h1 class="text-dark">Articles Not Found</h1>
+                <p class="text-muted">Sorry, there are no articles to display at the moment.</p>
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'blog:create_blog' %}" class="btn btn-primary mt-3">Create Blog</a>
+                {% else %}
+                    <a href="{% url 'account:login' %}" class="btn btn-primary mt-3">Login To Create Blog</a>
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+
 
     <section class="blog-posts">
         <div class="container">
@@ -142,6 +157,7 @@
             </div>
         </div>
     </section>
+    {% endif %}
 {% endblock %}
 
 

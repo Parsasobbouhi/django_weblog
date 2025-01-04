@@ -25,6 +25,16 @@
     <!-- Banner Ends Here -->
 
     {% include 'includes/user_card_bar.html' %}
+    {% if not articles %}
+        <div class="container vh-100 d-flex justify-content-center align-items-center">
+            <div class="text-center p-5 shadow-lg rounded bg-light">
+                <i class="fa fa-folder-open text-primary mb-3" style="font-size: 4rem;"></i>
+                <h1 class="text-dark">Articles Not Found</h1>
+                <p class="text-muted">Sorry, there are no articles to display at the moment.</p>
+                <a href="{% url 'home:main' %}" class="btn btn-primary mt-3">Back to Home</a>
+            </div>
+        </div>
+    {% else %}
 
 
     <section class="blog-posts grid-system">
@@ -126,4 +136,5 @@
             </div>
         </div>
     </section>
+    {% endif %}
 {% endblock %}
