@@ -66,7 +66,7 @@ def edit_profile(request):
     return render(request, 'account/edit_profile.html', {'form': form})
 
 def about_developer(request):
-    user = get_object_or_404(models.Profile, id=2)
-    return render(request, 'account/about_developer.html', {'user': user})
+    user = get_object_or_404(models.Profile, id=3)
+    return render(request, 'account/about_developer.html', {'admin': user})
 
 

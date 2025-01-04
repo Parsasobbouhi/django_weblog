@@ -34,5 +34,5 @@ def user(request):
         return {}
 
 def admin_user(request):
-    admin = get_object_or_404(account_models.Profile, id=2)
+    admin = get_object_or_404(account_models.Profile, id=3)
     return {'admin': admin}
